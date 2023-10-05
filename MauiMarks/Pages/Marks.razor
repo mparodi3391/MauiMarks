@@ -1,0 +1,72 @@
+﻿@page "/marcas"
+
+<h3>Marca</h3>
+
+<EditForm Model="typeof(Mark)">
+
+    <div class="d-flex flex-column">
+        <span>Codigo de Empleado</span>
+        <InputNumber TValue="int?" class="m-1" @bind-Value="mark.EmpID"></InputNumber>
+    </div>
+    
+    <div class="d-flex flex-column">
+        <span>Contraseña</span>
+        <InputNumber TValue="int?" class="m-1" @bind-Value="mark.PassCode"></InputNumber>
+    </div>
+
+    <div class="d-flex flex-column">
+        <span class="m-1">Tipo de Marca</span>
+        <InputSelect class="m-1" TValue="int" @bind-Value="mark.MarkType">
+            <option value="1">Entrada</option>
+            <option value="2">Salida Descanso</option>
+            <option value="3">Entrada Descanso</option>
+            <option value="4">Salida</option>
+        </InputSelect>
+    </div>
+
+    <button type="submit" class="btn btn-primary m-1" @onclick="SubmitMark">Enviar</button>
+
+    @if (successfulMark)
+    {
+        <div class="modal" tabindex="-1" style="display:block" role="dialog">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+			            <h3 class="modal-title">Marca Existosa</h3>
+                        <button type="button" class="close" @onclick="() => {successfulMark = false;}">
+				            <span aria-hidden="true">X</span>
+			            </button>
+                    </div>
+		            <div class="modal-body">
+                        Gracias @emp.Name, has marcado @MarkTypes[(int)mark.MarkType] con fecha @mark.MarkDate
+		            </div>
+                </div>
+            </div>
+        </div>
+
+    }
+
+
+</EditForm>
+
+
+@code {
+    public Mark mark = new();
+    public bool successfulMark = false;
+    public Employee emp = new();
+
+    public Dictionary<int, string> MarkTypes = new()
+    {
+        {1, "Entrada" },
+        {2, "Salida Descanso" },
+        {3, "Entrada Descanso" },
+        {4, "Salido"}
+    };
+
+    public void SubmitMark()
+    {
+        emp = new Employee() { EmpID = 1, Name = "Martin" };
+        successfulMark = true;
+        mark.MarkDate = DateTime.Now;
+    }
+}
